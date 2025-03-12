@@ -1,1 +1,23 @@
 package utils
+
+import (
+	"encoding/json"
+	"io"
+	"log"
+	"net/http"
+)
+
+func ParseBody(r *http.Request, x interface{}) {
+	defer r.Body.Close()
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error reading body: %v", err)
+		return
+	}
+
+	if err := json.Unmarshal(body, x); err != nil {
+		log.Printf("Error unmarshalling JSON: %v", err)
+		return
+	}
+}
