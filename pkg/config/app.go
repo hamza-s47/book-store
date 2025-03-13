@@ -5,9 +5,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-var (
-	db *gorm.DB
-)
+var db *gorm.DB
 
 func Connect() {
 	d, err := gorm.Open("mysql", "root:1234@tcp(127.0.0.1:3306)/bookstore?charset=utf8mb4&parseTime=True&loc=Local")
