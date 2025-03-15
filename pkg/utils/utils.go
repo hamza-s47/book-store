@@ -16,6 +16,8 @@ func ParseBody(r *http.Request, x any) {
 		return
 	}
 
+	log.Printf("Received body: %s", body)
+
 	if err := json.Unmarshal(body, x); err != nil {
 		log.Printf("Error unmarshalling JSON: %v", err)
 		return
