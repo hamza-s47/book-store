@@ -72,7 +72,34 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	bookId := vars["bookId"]
+	ID, err := strconv.ParseInt(bookId, 0, 0)
+	if err != nil {
+		log.Panicf("Error while parsing ID %v", err)
 
+		http.Error(w, "Failed to parse ID", http.StatusInternalServerError)
+		return
+	}
+
+	updatedBook := &models.Book{}
+	utils.ParseBody(r, updatedBook)
+
+	book, db := models.UpdateBook(ID, *updatedBook)
+	if db.Error != nil {
+		log.Printf("Error while updating book: %v", db.Error)
+		http.Error(w, "Failed to update book", http.StatusInternalServerError)
+		return
+	}
+
+	if book == nil {
+		http.Error(w, "Book not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(book)
 }
 
 func DeleteBook(w http.ResponseWriter, r *http.Request) {

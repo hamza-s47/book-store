@@ -44,17 +44,23 @@ func DeleteBook(Id int64) Book {
 	return book
 }
 
-// func UpdateBook(Id int64, updatedBook Book) (*Book, *gorm.DB) {
-// 	var book Book
+func UpdateBook(Id int64, updatedBook Book) (*Book, *gorm.DB) {
+	var book Book
 
-// 	db := db.Where("ID=?", Id).First(&book)
-// 	if db.RecordNotFound() {
-// 		return nil, db
-// 	}
-// 	book.Name = updatedBook.Name
-// 	book.Author = updatedBook.Author
-// 	book.Publication = updatedBook.Publication
+	db := db.Where("ID=?", Id).First(&book)
+	if db.RecordNotFound() {
+		return nil, db
+	}
+	if updatedBook.Name != "" {
+		book.Name = updatedBook.Name
+	}
+	if updatedBook.Author != "" {
+		book.Author = updatedBook.Author
+	}
+	if updatedBook.Publication != "" {
+		book.Publication = updatedBook.Publication
+	}
 
-// 	db.Save(&book)
-// 	return &book, db
-// }
+	db.Save(&book)
+	return &book, db
+}
