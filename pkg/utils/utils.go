@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func ParseBody(r *http.Request, x interface{}) {
+func ParseBody(r *http.Request, x any) {
 	defer r.Body.Close()
 
 	body, err := io.ReadAll(r.Body)
